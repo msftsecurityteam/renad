@@ -1,10 +1,27 @@
 ```mermaid
-graph LR
-  BI[Biomarker Input] -->|Sub-model Processing| BM[Biomarker Model]
-  GI[Genomic Input] -->|Sub-model Processing| GM[Genomic Model]
-  QI[Questionnaire Input] -->|Sub-model Processing| QM[Questionnaire Model]
-  DI[Drug Input] -->|Sub-model Processing| DM[Drug Model]
-  CI[COWS Input] -->|Sub-model Processing| CM[COWS Model]
+graph TD
+  style BI fill:#f9d5e5,stroke:#b84a62
+  style GI fill:#e3eaa7,stroke:#b3c100
+  style QI fill:#d5f4e6,stroke:#80ced6
+  style DI fill:#f4e1d2,stroke:#be9b7b
+  style CI fill:#ffef96,stroke:#ffcc5c
+
+  style BM fill:#f9d5e5,stroke:#b84a62
+  style GM fill:#e3eaa7,stroke:#b3c100
+  style QM fill:#d5f4e6,stroke:#80ced6
+  style DM fill:#f4e1d2,stroke:#be9b7b
+  style CM fill:#ffef96,stroke:#ffcc5c
+
+  style C fill:#f2f2f2,stroke:#666
+  style D1 fill:#d6d6c2,stroke:#999
+  style D2 fill:#d6d6c2,stroke:#999
+  style FO fill:#c2d6d6,stroke:#66b2b2
+
+  BI[Biomarker Input] -->|Convolutional NN| BM[Biomarker Model]
+  GI[Genomic Input] -->|Recurrent NN| GM[Genomic Model]
+  QI[Questionnaire Input] -->|Feedforward NN| QM[Questionnaire Model]
+  DI[Drug Input] -->|Custom Processing| DM[Drug Model]
+  CI[COWS Input] -->|Sequence Processing| CM[COWS Model]
 
   BM --> C[Concatenate]
   GM --> C
@@ -12,9 +29,9 @@ graph LR
   DM --> C
   CM --> C
 
-  C --> D1[Dense 1024]
-  D1 --> D2[Dense 512]
-  D2 --> FO[Final Output 980-class]
+  C --> D1[Dense 1024\nActivation: ReLU]
+  D1 --> D2[Dense 512\nActivation: ReLU]
+  D2 --> FO[Final Output\n980-class\nActivation: Softmax]
 
   subgraph TensorFlow Model
       BI
